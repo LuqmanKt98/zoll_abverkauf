@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import Icon from '@/components/ui/AppIcon';
 import { getFAQsByCategory } from '@/data/faqs';
 
@@ -27,71 +28,78 @@ const FAQAccordion = ({ className = '' }: FAQAccordionProps) => {
   };
 
   return (
-    <div className={`bg-white rounded-lg shadow-sm border border-border ${className}`}>
+    <section className={`bg-white rounded-lg border border-border shadow-sm ${className}`}>
       <div className="p-6 border-b border-border">
-        <h2 className="text-2xl font-bold text-text-primary flex items-center space-x-2">
-          <Icon name="QuestionMarkCircleIcon" size={24} className="text-brand-primary" />
-          <span>Häufig gestellte Fragen - Edelmetalle</span>
-        </h2>
-        <p className="text-text-secondary mt-2">
-          Wichtige Informationen zu Authentifizierung, Lagerung und rechtlichen Bestimmungen
-        </p>
-      </div>
-
-      <div className="divide-y divide-border">
-        {faqItems.length === 0 ? (
-          <div className="p-6 text-center text-text-secondary">
-            Keine FAQs verfügbar.
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 bg-brand-primary rounded-full flex items-center justify-center">
+            <Icon name="QuestionMarkCircleIcon" size={18} className="text-white" variant="solid" />
           </div>
-        ) : (
-          faqItems.map((item) => {
-            const isOpen = openItems.includes(item.id);
-
-            return (
-              <div key={item.id} className="p-6">
-                <button
-                  onClick={() => toggleItem(item.id)}
-                  className="w-full flex items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 rounded-md p-2 -m-2"
-                  aria-expanded={isOpen}
-                >
-                  <h3 className="font-semibold text-text-primary pr-4">
-                    {item.question}
-                  </h3>
-                  <div className="flex-shrink-0">
-                    <Icon
-                      name={isOpen ? "ChevronUpIcon" : "ChevronDownIcon"}
-                      size={20}
-                      className="text-text-secondary transition-transform duration-200"
-                    />
-                  </div>
-                </button>
-
-                {isOpen && (
-                  <div className="mt-4 pl-2">
-                    <p className="text-text-secondary leading-relaxed">
-                      {item.answer}
-                    </p>
-                  </div>
-                )}
-              </div>
-            );
-          })
-        )}
-      </div>
-
-      <div className="p-6 bg-muted border-t border-border">
-        <div className="flex items-start space-x-3">
-          <Icon name="InformationCircleIcon" size={20} className="text-brand-primary flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm text-text-secondary">
-              <strong>Weitere Fragen?</strong> Unser Expertenteam steht Ihnen für spezielle Anfragen zu Edelmetallen zur Verfügung. 
-              Kontaktieren Sie uns über unser <a href="/contact" className="text-brand-primary hover:underline">Kontaktformular</a> oder 
-              telefonisch während der Geschäftszeiten.
-            </p>
+            <h2 className="text-xl font-semibold text-text-primary">Häufig gestellte Fragen – Edelmetalle</h2>
+            <p className="text-sm text-text-secondary">Wichtige Informationen zu Authentifizierung und Lagerung</p>
           </div>
         </div>
       </div>
-    </div>
+
+      <div className="p-6">
+        <div className="space-y-4">
+          {faqItems.length === 0 ? (
+            <div className="text-center text-text-secondary py-4">
+              Keine FAQs verfügbar.
+            </div>
+          ) : (
+            faqItems.map((item) => {
+              const isOpen = openItems.includes(item.id);
+              return (
+                <div key={item.id} className="border border-border rounded-lg overflow-hidden">
+                  <button
+                    onClick={() => toggleItem(item.id)}
+                    className="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-muted transition-colors duration-300"
+                    aria-expanded={isOpen}
+                  >
+                    <span className="font-medium text-text-primary pr-4">{item.question}</span>
+                    <Icon
+                      name={isOpen ? "ChevronUpIcon" : "ChevronDownIcon"}
+                      size={20}
+                      className="text-text-secondary flex-shrink-0"
+                    />
+                  </button>
+                  {isOpen && (
+                    <div className="px-4 pb-4 pt-2 bg-muted/30 border-t border-border/50">
+                      <p className="text-text-secondary leading-relaxed text-sm md:text-base">
+                        {item.answer}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              );
+            })
+          )}
+        </div>
+
+        {/* Footer / Contact Hint Match Misc Style */}
+        <div className="mt-8 pt-6 border-t border-border">
+          <div className="bg-blue-50/50 rounded-lg p-4 border border-blue-100">
+            <div className="flex items-start space-x-3">
+              <Icon name="InformationCircleIcon" size={20} className="text-brand-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="text-sm font-medium text-text-primary mb-1">Weitere Fragen?</p>
+                <p className="text-xs text-text-secondary mb-2 leading-relaxed">
+                  Unser Expertenteam steht Ihnen für spezielle Anfragen zu Edelmetallen zur Verfügung.
+                </p>
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center space-x-1 text-xs text-brand-primary hover:text-brand-secondary transition-colors duration-200 font-medium"
+                >
+                  <span>Kontakt aufnehmen</span>
+                  <Icon name="ArrowRightIcon" size={12} />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
 

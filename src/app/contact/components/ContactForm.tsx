@@ -51,7 +51,7 @@ const ContactForm = ({ className = '' }: ContactFormProps) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
-    
+
     if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked;
       setFormData(prev => ({
@@ -84,6 +84,7 @@ const ContactForm = ({ className = '' }: ContactFormProps) => {
           name: `${formData.firstName} ${formData.lastName}`,
           email: formData.email,
           phone: formData.phone,
+          company: formData.company,
           subject: formData.subject,
           message: formData.message,
           inquiryType: formData.inquiryType,
@@ -137,224 +138,243 @@ const ContactForm = ({ className = '' }: ContactFormProps) => {
   }
 
   return (
-    <div className={`card p-8 ${className}`}>
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold text-text-primary mb-2">Kontaktformular</h2>
-        <p className="text-text-secondary">
-          Nutzen Sie dieses Formular für Ihre Anfragen. Wir bearbeiten alle Eingaben gemäß den offiziellen Zollverfahren.
+    <div className={`card p-6 md:p-8 bg-white border border-border shadow-sm rounded-xl ${className}`}>
+      <div className="mb-8 border-b border-border pb-6">
+        <h2 className="text-2xl md:text-3xl font-bold text-text-primary mb-3">
+          Kontaktformular
+        </h2>
+        <p className="text-base md:text-lg text-text-secondary leading-relaxed">
+          Bitte füllen Sie die Felder unten aus. Felder mit einem <span className="text-brand-primary font-bold">*</span> sind Pflichtfelder.
         </p>
       </div>
 
-      {/* Important Notice */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-        <div className="flex items-start space-x-3">
-          <Icon name="InformationCircleIcon" size={20} className="text-blue-600 mt-0.5 flex-shrink-0" />
-          <div>
-            <h4 className="font-semibold text-blue-900 mb-2">Wichtiger Hinweis</h4>
-            <p className="text-blue-800 text-sm leading-relaxed">
-              Bitte beachten Sie: Eine persönliche Besichtigung oder Abholung der Artikel ist nicht möglich. 
-              Alle Vermögenswerte befinden sich in zentralen Verwahrungs- und Zollstandorten, die für den 
-              Publikumsverkehr nicht zugänglich sind. Diese Maßnahme dient der Sicherheit, der Versicherung 
-              des Warenwerts und der ordnungsgemäßen Verwaltung der Bestände. Nach Zahlungseingang erfolgt 
-              die Auslieferung ausschließlich über zugelassene, versicherte Logistik- oder Werttransportdienstleister.
-            </p>
-          </div>
-        </div>
-      </div>
-
       {submitStatus === 'success' && (
-        <div className="mb-6 p-4 bg-success/10 border border-success/20 rounded-lg">
-          <div className="flex items-center space-x-2">
-            <Icon name="CheckCircleIcon" size={20} className="text-success" variant="solid" />
-            <span className="text-success font-medium">
-              Ihre Anfrage wurde erfolgreich übermittelt. Sie erhalten innerhalb von 2 Werktagen eine Antwort.
-            </span>
+        <div className="mb-8 p-6 bg-green-50 border-2 border-green-200 rounded-xl animate-fade-in flex items-start gap-4 shadow-sm">
+          <div className="flex-shrink-0 p-1 bg-green-100 rounded-full text-green-700">
+            <Icon name="CheckCircleIcon" size={32} variant="solid" />
+          </div>
+          <div>
+            <h3 className="font-bold text-green-900 text-xl mb-2">Gesendet!</h3>
+            <p className="text-green-800 text-lg">
+              Wir haben Ihre Nachricht erhalten. Unser Team meldet sich in Kürze bei Ihnen.
+            </p>
           </div>
         </div>
       )}
 
       {submitStatus === 'error' && (
-        <div className="mb-6 p-4 bg-error/10 border border-error/20 rounded-lg">
-          <div className="flex items-center space-x-2">
-            <Icon name="ExclamationCircleIcon" size={20} className="text-error" variant="solid" />
-            <span className="text-error font-medium">
-              Fehler beim Senden der Anfrage. Bitte versuchen Sie es erneut oder kontaktieren Sie uns telefonisch.
-            </span>
+        <div className="mb-8 p-6 bg-red-50 border-2 border-red-200 rounded-xl animate-fade-in flex items-start gap-4">
+          <Icon name="ExclamationCircleIcon" size={32} className="text-red-600 flex-shrink-0" variant="solid" />
+          <div>
+            <h3 className="font-bold text-red-900 text-xl mb-2">Ein Fehler ist aufgetreten</h3>
+            <p className="text-red-800 text-lg">
+              Das hat leider nicht geklappt. Bitte rufen Sie uns an oder versuchen Sie es später noch einmal.
+            </p>
           </div>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Inquiry Type */}
-        <div>
-          <label htmlFor="inquiryType" className="block text-sm font-medium text-text-primary mb-2">
-            Art der Anfrage *
+      <form onSubmit={handleSubmit} className="space-y-8">
+
+        {/* Topic Selection */}
+        <div className="space-y-3">
+          <label htmlFor="inquiryType" className="block text-lg font-bold text-gray-900">
+            Worum geht es? <span className="text-brand-primary">*</span>
           </label>
-          <select
-            id="inquiryType"
-            name="inquiryType"
-            value={formData.inquiryType}
-            onChange={handleInputChange}
-            required
-            className="input w-full official-form-input"
-          >
-            <option value="">Bitte wählen Sie eine Kategorie</option>
-            {inquiryTypes.map((type) => (
-              <option key={type.value} value={type.value}>
-                {type.label}
-              </option>
-            ))}
-          </select>
+          <div className="relative">
+            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+              <Icon name="InformationCircleIcon" size={24} />
+            </div>
+            <select
+              id="inquiryType"
+              name="inquiryType"
+              value={formData.inquiryType}
+              onChange={handleInputChange}
+              required
+              className="w-full appearance-none bg-gray-50 border-2 border-gray-200 hover:border-brand-primary/50 focus:border-brand-primary rounded-xl pl-14 pr-12 py-4 text-lg text-gray-900 focus:ring-4 focus:ring-brand-primary/20 outline-none transition-all cursor-pointer"
+            >
+              <option value="">Bitte auswählen...</option>
+              {inquiryTypes.map((type) => (
+                <option key={type.value} value={type.value}>
+                  {type.label}
+                </option>
+              ))}
+            </select>
+            <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-500">
+              <Icon name="ChevronDownIcon" size={24} />
+            </div>
+          </div>
         </div>
 
         {/* Product ID (conditional) */}
-        {formData.inquiryType === 'product' && (
-          <div>
-            <label htmlFor="productId" className="block text-sm font-medium text-text-primary mb-2">
-              Produkt-ID (optional)
+        <div className={`transition-all duration-300 overflow-hidden ${formData.inquiryType === 'product' ? 'max-h-32 opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className="space-y-3 p-4 bg-muted/30 rounded-xl border border-border/50">
+            <label htmlFor="productId" className="block text-lg font-bold text-gray-900">
+              Produkt-ID / Nummer
+            </label>
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">
+                <Icon name="HashtagIcon" size={20} />
+              </div>
+              <input
+                type="text"
+                id="productId"
+                name="productId"
+                value={formData.productId}
+                onChange={handleInputChange}
+                placeholder="z.B. 12345"
+                className="w-full bg-white border-2 border-gray-200 rounded-lg pl-12 pr-4 py-3 text-lg focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/20 outline-none"
+              />
+            </div>
+            <p className="text-sm text-gray-600">Die Nummer finden Sie im Titel des Angebots.</p>
+          </div>
+        </div>
+
+        {/* Personal Details Section */}
+        <div className="space-y-6 pt-4">
+          <h3 className="text-xl font-bold text-brand-primary border-b border-border pb-2">Ihre Kontaktdaten</h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-3">
+              <label htmlFor="firstName" className="block text-lg font-bold text-gray-900">
+                Vorname <span className="text-brand-primary">*</span>
+              </label>
+              <div className="relative">
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                  <Icon name="UserIcon" size={24} />
+                </div>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full bg-gray-50 border-2 border-gray-200 hover:border-gray-300 focus:border-brand-primary rounded-xl pl-14 pr-4 py-4 text-lg text-gray-900 focus:ring-4 focus:ring-brand-primary/20 outline-none transition-all placeholder:text-gray-400"
+                  placeholder="Max"
+                />
+              </div>
+            </div>
+            <div className="space-y-3">
+              <label htmlFor="lastName" className="block text-lg font-bold text-gray-900">
+                Nachname <span className="text-brand-primary">*</span>
+              </label>
+              <div className="relative">
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                  <Icon name="UserIcon" size={24} />
+                </div>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full bg-gray-50 border-2 border-gray-200 hover:border-gray-300 focus:border-brand-primary rounded-xl pl-14 pr-4 py-4 text-lg text-gray-900 focus:ring-4 focus:ring-brand-primary/20 outline-none transition-all placeholder:text-gray-400"
+                  placeholder="Mustermann"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-3">
+              <label htmlFor="email" className="block text-lg font-bold text-gray-900">
+                E-Mail-Adresse <span className="text-brand-primary">*</span>
+              </label>
+              <div className="relative">
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                  <Icon name="EnvelopeIcon" size={24} />
+                </div>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full bg-gray-50 border-2 border-gray-200 hover:border-gray-300 focus:border-brand-primary rounded-xl pl-14 pr-4 py-4 text-lg text-gray-900 focus:ring-4 focus:ring-brand-primary/20 outline-none transition-all placeholder:text-gray-400"
+                  placeholder="name@beispiel.de"
+                />
+              </div>
+            </div>
+            <div className="space-y-3">
+              <label htmlFor="phone" className="block text-lg font-bold text-gray-900">
+                Telefonnummer <span className="text-sm font-normal text-gray-500">(Optional)</span>
+              </label>
+              <div className="relative">
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                  <Icon name="PhoneIcon" size={24} />
+                </div>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  className="w-full bg-gray-50 border-2 border-gray-200 hover:border-gray-300 focus:border-brand-primary rounded-xl pl-14 pr-4 py-4 text-lg text-gray-900 focus:ring-4 focus:ring-brand-primary/20 outline-none transition-all placeholder:text-gray-400"
+                  placeholder="0170 1234567"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Message Section */}
+        <div className="space-y-6 pt-4">
+          <h3 className="text-xl font-bold text-brand-primary border-b border-border pb-2">Ihre Nachricht</h3>
+
+          <div className="space-y-3">
+            <label htmlFor="subject" className="block text-lg font-bold text-gray-900">
+              Betreff <span className="text-brand-primary">*</span>
             </label>
             <input
               type="text"
-              id="productId"
-              name="productId"
-              value={formData.productId}
-              onChange={handleInputChange}
-              placeholder="z.B. ZA-2024-001234"
-              className="input w-full official-form-input"
-            />
-            <p className="text-xs text-text-muted mt-1">
-              Falls Sie sich für ein spezifisches Produkt interessieren, geben Sie hier die Produkt-ID an.
-            </p>
-          </div>
-        )}
-
-        {/* Personal Information */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-text-primary mb-2">
-              Vorname *
-            </label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              value={formData.firstName}
+              id="subject"
+              name="subject"
+              value={formData.subject}
               onChange={handleInputChange}
               required
-              className="input w-full official-form-input"
+              className="w-full bg-gray-50 border-2 border-gray-200 hover:border-gray-300 focus:border-brand-primary rounded-xl px-4 py-4 text-lg text-gray-900 focus:ring-4 focus:ring-brand-primary/20 outline-none transition-all"
+              placeholder="Kurze Zusammenfassung"
             />
           </div>
-          <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-text-primary mb-2">
-              Nachname *
+
+          <div className="space-y-3">
+            <label htmlFor="message" className="block text-lg font-bold text-gray-900">
+              Nachricht <span className="text-brand-primary">*</span>
             </label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              value={formData.lastName}
+            <textarea
+              id="message"
+              name="message"
+              value={formData.message}
               onChange={handleInputChange}
               required
-              className="input w-full official-form-input"
+              rows={6}
+              className="w-full bg-gray-50 border-2 border-gray-200 hover:border-gray-300 focus:border-brand-primary rounded-xl px-4 py-4 text-lg text-gray-900 focus:ring-4 focus:ring-brand-primary/20 outline-none transition-all resize-y min-h-[150px]"
+              placeholder="Schreiben Sie hier Ihre Frage..."
             />
           </div>
-        </div>
-
-        {/* Contact Information */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-text-primary mb-2">
-              E-Mail-Adresse *
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-              className="input w-full official-form-input"
-            />
-          </div>
-          <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-text-primary mb-2">
-              Telefonnummer
-            </label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              className="input w-full official-form-input"
-            />
-          </div>
-        </div>
-
-        {/* Company (optional) */}
-        <div>
-          <label htmlFor="company" className="block text-sm font-medium text-text-primary mb-2">
-            Unternehmen (optional)
-          </label>
-          <input
-            type="text"
-            id="company"
-            name="company"
-            value={formData.company}
-            onChange={handleInputChange}
-            className="input w-full official-form-input"
-          />
-        </div>
-
-        {/* Subject */}
-        <div>
-          <label htmlFor="subject" className="block text-sm font-medium text-text-primary mb-2">
-            Betreff *
-          </label>
-          <input
-            type="text"
-            id="subject"
-            name="subject"
-            value={formData.subject}
-            onChange={handleInputChange}
-            required
-            className="input w-full official-form-input"
-          />
-        </div>
-
-        {/* Message */}
-        <div>
-          <label htmlFor="message" className="block text-sm font-medium text-text-primary mb-2">
-            Nachricht *
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            value={formData.message}
-            onChange={handleInputChange}
-            required
-            rows={6}
-            className="input w-full official-form-input resize-none"
-            placeholder="Beschreiben Sie Ihr Anliegen detailliert..."
-          />
         </div>
 
         {/* Terms Agreement */}
-        <div className="flex items-start space-x-3">
-          <input
-            type="checkbox"
-            id="agreeToTerms"
-            name="agreeToTerms"
-            checked={formData.agreeToTerms}
-            onChange={handleInputChange}
-            required
-            className="mt-1 h-4 w-4 text-brand-primary border-border rounded focus:ring-brand-primary"
-          />
-          <label htmlFor="agreeToTerms" className="text-sm text-text-secondary">
-            Ich stimme der Verarbeitung meiner Daten gemäß der{' '}
-            <span className="text-brand-primary hover:underline cursor-pointer">Datenschutzerklärung</span>{' '}
-            zu und bestätige, dass alle Angaben wahrheitsgemäß sind. *
-          </label>
+        <div className="bg-blue-50/50 p-6 rounded-xl border border-blue-100">
+          <div className="flex items-start space-x-4">
+            <div className="flex items-center h-8">
+              <input
+                type="checkbox"
+                id="agreeToTerms"
+                name="agreeToTerms"
+                checked={formData.agreeToTerms}
+                onChange={handleInputChange}
+                required
+                className="w-6 h-6 text-brand-primary border-2 border-gray-300 rounded focus:ring-brand-primary cursor-pointer"
+              />
+            </div>
+            <label htmlFor="agreeToTerms" className="text-lg text-gray-700 cursor-pointer select-none leading-relaxed">
+              Ich stimme zu, dass meine Daten zur Bearbeitung meiner Anfrage gespeichert werden. <span className="text-brand-primary font-bold">*</span>
+            </label>
+          </div>
         </div>
 
         {/* Submit Button */}
@@ -362,17 +382,17 @@ const ContactForm = ({ className = '' }: ContactFormProps) => {
           <button
             type="submit"
             disabled={isSubmitting || !formData.agreeToTerms}
-            className="btn-primary w-full md:w-auto px-8 py-3 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+            className="w-full bg-brand-primary hover:bg-brand-secondary text-white font-bold text-xl py-5 px-8 rounded-xl shadow-lg hover:shadow-xl transform transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center space-x-3"
           >
             {isSubmitting ? (
               <>
-                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                <div className="animate-spin rounded-full h-6 w-6 border-3 border-white border-t-transparent"></div>
                 <span>Wird gesendet...</span>
               </>
             ) : (
               <>
-                <Icon name="PaperAirplaneIcon" size={16} />
-                <span>Anfrage senden</span>
+                <Icon name="PaperAirplaneIcon" size={24} />
+                <span>Nachricht absenden</span>
               </>
             )}
           </button>
