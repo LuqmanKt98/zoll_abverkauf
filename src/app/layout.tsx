@@ -39,11 +39,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de" translate="no" data-scroll-behavior="smooth" className={`${inter.variable} ${jetbrainsMono.variable} notranslate`} suppressHydrationWarning>
-      <head>
-        <meta name="google" content="notranslate" />
-      </head>
-      <body className="min-h-screen flex flex-col bg-background text-text-primary antialiased font-sans notranslate" translate="no" suppressHydrationWarning>
+    <html lang="de" data-scroll-behavior="smooth" className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
+      <body className="min-h-screen flex flex-col bg-background text-text-primary antialiased font-sans" suppressHydrationWarning>
         <Toaster
           position="bottom-right"
           richColors
