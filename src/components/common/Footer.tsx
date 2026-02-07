@@ -77,8 +77,16 @@ const Footer = ({ className = '' }: FooterProps) => {
             </h3>
             <ul className="space-y-2">
               <li>
-                <Link 
-                  href="/contact" 
+                <Link
+                  href="/about"
+                  className="text-sm text-text-secondary hover:text-brand-primary transition-colors"
+                >
+                  Über uns
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/contact"
                   className="text-sm text-text-secondary hover:text-brand-primary transition-colors"
                 >
                   Kontaktformular
@@ -131,20 +139,20 @@ const Footer = ({ className = '' }: FooterProps) => {
 
             {/* Legal Links */}
             <div className="flex items-center space-x-6">
-              <Link 
-                href="/impressum" 
+              <Link
+                href="/impressum"
                 className="text-sm text-text-secondary hover:text-brand-primary transition-colors"
               >
                 Impressum
               </Link>
-              <Link 
-                href="/datenschutz" 
+              <Link
+                href="/datenschutz"
                 className="text-sm text-text-secondary hover:text-brand-primary transition-colors"
               >
                 Datenschutz
               </Link>
-              <Link 
-                href="/agb" 
+              <Link
+                href="/agb"
                 className="text-sm text-text-secondary hover:text-brand-primary transition-colors"
               >
                 AGB
@@ -161,8 +169,8 @@ const Footer = ({ className = '' }: FooterProps) => {
                   Wichtiger Hinweis
                 </p>
                 <p className="text-xs text-text-secondary leading-relaxed">
-                  Dies ist eine offizielle Anfrage-Plattform für beschlagnahmte Güter der deutschen Zollverwaltung. 
-                  Kein direkter Verkauf oder Abholung möglich. Alle Transaktionen erfolgen ausschließlich über 
+                  Dies ist eine offizielle Anfrage-Plattform für beschlagnahmte Güter der deutschen Zollverwaltung.
+                  Kein direkter Verkauf oder Abholung möglich. Alle Transaktionen erfolgen ausschließlich über
                   autorisierte Behörden nach erfolgreichem Antragsverfahren.
                 </p>
               </div>
